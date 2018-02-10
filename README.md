@@ -1,1 +1,1 @@
-# vimeo-for-lifter-lms
+# Vimeo for LifterLMS
