@@ -9,10 +9,8 @@ Author URI: http://shramee.me/
 @developer shramee <shramee.srivastav@gmail.com>
 */
 
-/** Plugin admin class */
-require 'inc/class-admin.php';
 /** Plugin public class */
-require 'inc/class-public.php';
+require 'inc/class-integration.php';
 
 /**
  * Vimeo for LifterLMS main class
@@ -42,12 +40,6 @@ class Vimeo_LLMS {
 	/** @var string Plugin directory path */
 	public static $path;
 
-	/** @var Vimeo_LLMS_Admin Instance */
-	public $admin;
-
-	/** @var Vimeo_LLMS_Public Instance */
-	public $public;
-
 	/**
 	 * Return class instance
 	 * @return Vimeo_LLMS instance
@@ -57,6 +49,38 @@ class Vimeo_LLMS {
 			self::$_instance = new self( $file );
 		}
 		return self::$_instance;
+	}
+
+	/**
+	 * Return class instance
+	 * @return LLMS_Abstract_Integration instance
+	 */
+	public static function integration() {
+		return LLMS()->integrations()->get_integration( 'vimeo' );
+	}
+
+	public static function vimeo_api( $endpoint = '/me/videos', $post_fields = '{"upload":{"approach":"post","redirect":""}}' ) {
+
+		$ch = curl_init( "https://api.vimeo.com$endpoint" );
+
+		curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
+
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_fields );
+
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, [
+			'Authorization:Bearer ' . get_option( 'vimeo-llms-access-token' ),
+			'Content-Type:application/json',
+		] );
+
+		$response = curl_exec( $ch );
+
+		if ( $response ) {
+			$response = json_decode( $response, 'array' );
+		}
+
+		return $response;
 	}
 
 	/**
@@ -73,34 +97,17 @@ class Vimeo_LLMS {
 		self::$path    = plugin_dir_path( $file );
 		self::$version = '1.0.0';
 
-		$this->_admin(); //Initiate admin
-		$this->_public(); //Initiate public
-
-	}
-
-	/**
-	 * Initiates admin class and adds admin hooks
-	 */
-	private function _admin() {
-		//Instantiating admin class
-		$this->admin = Vimeo_LLMS_Admin::instance();
-
-		//Enqueue admin end JS and CSS
-		add_action( 'admin_enqueue_scripts',	array( $this->admin, 'enqueue' ) );
-
+		add_action( 'lifterlms_integrations',	array( $this, 'lifterlms_integrations' ) );
 	}
 
 	/**
 	 * Initiates public class and adds public hooks
 	 */
-	private function _public() {
-		//Instantiating public class
-		$this->public = Vimeo_LLMS_Public::instance();
-
-		//Enqueue front end JS and CSS
-		add_action( 'wp_enqueue_scripts',	array( $this->public, 'enqueue' ) );
-
+	public function lifterlms_integrations( $integrations ) {
+		$integrations[] = 'Vimeo_LLMS_Integration';
+		return $integrations;
 	}
+
 }
 
 /** Intantiating main plugin class */
