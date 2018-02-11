@@ -4,3 +4,14 @@
  * @package Vimeo_LLMS
  * @version 1.0.0
  */
+
+.vimeo-llms-hd-video {
+	padding-bottom: 56.25%;
+}
+.vimeo-llms-hd-video iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}

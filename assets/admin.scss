@@ -105,3 +105,15 @@ a.button[href="#vimeo-llms-upload-popup"] {
 	display: block;
 	margin: 2em auto;
 }
+
+.vimeo-llms-hd-video {
+	padding-bottom: 56.25%;
+	position: relative;
+	iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}
