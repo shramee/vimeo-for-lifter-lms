@@ -4,3 +4,83 @@
  * @package Vimeo_LLMS
  * @version 1.0.0
  */
+a.button[href="#vimeo-llms-upload-popup"] {
+  display: block;
+  margin: 2em auto;
+  text-align: center; }
+
+#vimeo-llms-upload-popup {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  display: none;
+  text-align: center; }
+  #vimeo-llms-upload-popup:target {
+    display: flex; }
+  #vimeo-llms-upload-popup h2 {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0 0 1.6em;
+    line-height: 1.4;
+    border-bottom: 1px solid #eee; }
+  #vimeo-llms-upload-popup form, #vimeo-llms-upload-popup label {
+    display: block; }
+  #vimeo-llms-upload-popup .vimeo-llms-upload-progress {
+    margin: 1.6em;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 3px #aaa;
+    position: relative;
+    border-radius: 25px;
+    overflow: hidden; }
+  #vimeo-llms-upload-popup .vimeo-llms-upload-bar {
+    padding: 25px 0 0;
+    background: #aaa; }
+  #vimeo-llms-upload-popup .button-hero + input {
+    display: none; }
+  #vimeo-llms-upload-popup #vimeo-llms-close-upload-form {
+    top: 0;
+    left: 0;
+    padding: 7px;
+    width: auto;
+    height: auto;
+    position: absolute;
+    text-decoration: none;
+    color: #556; }
+  #vimeo-llms-upload-popup > div {
+    position: relative;
+    z-index: 1;
+    padding: 0; }
+    #vimeo-llms-upload-popup > div form, #vimeo-llms-upload-popup > div p {
+      margin: 1.6em; }
+  #vimeo-llms-upload-popup .error-message,
+  #vimeo-llms-upload-popup .updating-message {
+    display: none; }
+    #vimeo-llms-upload-popup .error-message h4,
+    #vimeo-llms-upload-popup .updating-message h4 {
+      font-size: 20px; }
+    #vimeo-llms-upload-popup .error-message:before,
+    #vimeo-llms-upload-popup .updating-message:before {
+      font-size: 25px;
+      line-height: 40px;
+      color: inherit; }
+  #vimeo-llms-upload-popup .file-error ~ .vimeo-llms-upload-status, #vimeo-llms-upload-popup .file-error label {
+    display: none; }
+  #vimeo-llms-upload-popup .file-error .error-message {
+    display: block; }
+  #vimeo-llms-upload-popup .uploading label {
+    display: none; }
+  #vimeo-llms-upload-popup .uploading .updating-message {
+    display: inline-block; }
+
+#titlediv ~ iframe:first-of-type {
+  width: 640px;
+  height: 360px;
+  display: block;
+  margin: 2em auto; }
+
+/*# sourceMappingURL=admin.css.map */

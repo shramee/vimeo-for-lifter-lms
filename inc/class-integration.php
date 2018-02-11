@@ -73,14 +73,15 @@ class Vimeo_LLMS_Integration extends LLMS_Abstract_Integration {
 				<a id='vimeo-llms-close-upload-form' href='#'><i class='dashicons dashicons-no'></i></a>
 				<form method='POST' action='<?php echo $action ?>' enctype='multipart/form-data' id='vimeo-llms-upload-form'>
 					<label>
-						<a class='button button-hero'>Select file</a><input type='file' name='file_data' id='vimeo-llms-file-input'>
+						<a class='button button-hero button-pick-file'>Select file</a><input type='file' name='file_data' id='vimeo-llms-file-input'>
 					</label>
 					<a class="button button-hero updating-message"><?php _e( 'Uploading', 'vimeo-llms' ); ?></a>
+					<div class="error-message">
+						<h4><?php echo get_option( 'vimeo-llms-video-file-error', 'Oops, Something went wrong!' ) ?></h4>
+						<p>ARE YOU UPLOADING CORRECT <a href="https://wixbu.com/formatos">FORMAT</a>?</p>
+					</div>
 				</form>
 				<div class="vimeo-llms-upload-status">
-					<div class="vimeo-llms-upload-progress" style="display:none;">
-						<div class="vimeo-llms-upload-bar" style="width:100%;"></div>
-					</div>
 					<p><?php echo get_option( 'vimeo-llms-video-recommendation' ) ?></p>
 				</div>
 			</div>

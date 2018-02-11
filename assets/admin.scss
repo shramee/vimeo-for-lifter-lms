@@ -1,0 +1,107 @@
+/**
+ * Plugin front end styles
+ *
+ * @package Vimeo_LLMS
+ * @version 1.0.0
+ */
+
+a.button[href="#vimeo-llms-upload-popup"] {
+	display: block;
+	margin: 2em auto;
+	text-align: center;
+}
+
+#vimeo-llms-upload-popup {
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: fixed;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.25);
+	display: none;
+	text-align: center;
+	&:target {
+		display: flex;
+	}
+	h2 {
+		font-size: 14px;
+		padding: 8px 12px;
+		margin: 0 0 1.6em;
+		line-height: 1.4;
+		border-bottom: 1px solid #eee;
+	}
+	form, label {
+		display: block;
+	}
+	.vimeo-llms-upload-progress {
+		margin: 1.6em;
+		border: 3px solid #fff;
+		box-shadow: 0 0 0 3px #aaa;
+		position: relative;
+		border-radius: 25px;
+		overflow: hidden;
+	}
+	.vimeo-llms-upload-bar {
+		padding: 25px 0 0;
+		background: #aaa;
+	}
+	.button-hero + input {
+		display: none;
+	}
+	#vimeo-llms-close-upload-form {
+		top: 0;
+		left: 0;
+		padding: 7px;
+		width: auto;
+		height: auto;
+		position: absolute;
+		text-decoration: none;
+		color: #556;
+	}
+	> div {
+		position: relative;
+		z-index: 1;
+		padding: 0;
+		form, p {
+			margin: 1.6em;
+		}
+	}
+
+	.error-message,
+	.updating-message {
+		display: none;
+		h4{
+			font-size: 20px;
+		}
+		&:before {
+			font-size: 25px;
+			line-height: 40px;
+			color: inherit;
+		}
+	}
+	.file-error {
+		~ .vimeo-llms-upload-status, label {
+			display: none;
+		}
+		.error-message {
+			display: block;
+		}
+	}
+	.uploading {
+		label {
+			display: none;
+		}
+		.updating-message {
+			display: inline-block;
+		}
+	}
+}
+
+#titlediv ~ iframe:first-of-type {
+	width: 640px;
+	height: 360px;
+	display: block;
+	margin: 2em auto;
+}
