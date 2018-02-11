@@ -59,7 +59,7 @@ class Vimeo_LLMS {
 		return LLMS()->integrations()->get_integration( 'vimeo' );
 	}
 
-	public static function vimeo_api( $endpoint = '/me/videos', $post_fields = '{"upload":{"approach":"post","redirect":""}}' ) {
+	public static function vimeo_api( $endpoint = '/me/videos', $post_fields = array() ) {
 
 		$ch = curl_init( "https://api.vimeo.com$endpoint" );
 
@@ -67,7 +67,9 @@ class Vimeo_LLMS {
 
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_fields );
+		if ( $post_fields ) {
+			curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $post_fields ) );
+		}
 
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, [
 			'Authorization:Bearer ' . get_option( 'vimeo-llms-access-token' ),
@@ -98,6 +100,8 @@ class Vimeo_LLMS {
 		self::$version = '1.0.0';
 
 		add_action( 'lifterlms_integrations',	array( $this, 'lifterlms_integrations' ) );
+		add_action( 'init',	array( $this, 'init' ) );
+		register_activation_hook( __FILE__, array( $this, 'rewrite_flush' ) );
 	}
 
 	/**
@@ -108,6 +112,75 @@ class Vimeo_LLMS {
 		return $integrations;
 	}
 
+	public function init() {
+		$labels = array(
+			'name'               => _x( 'Videos', 'post type general name', 'vimeo-llms' ),
+			'singular_name'      => _x( 'Video', 'post type singular name', 'vimeo-llms' ),
+			'menu_name'          => _x( 'Videos', 'admin menu', 'vimeo-llms' ),
+			'name_admin_bar'     => _x( 'Video', 'add new on admin bar', 'vimeo-llms' ),
+			'add_new'            => _x( 'Add New', 'video', 'vimeo-llms' ),
+			'add_new_item'       => __( 'Add New Video', 'vimeo-llms' ),
+			'new_item'           => __( 'New Video', 'vimeo-llms' ),
+			'edit_item'          => __( 'Edit Video', 'vimeo-llms' ),
+			'view_item'          => __( 'View Video', 'vimeo-llms' ),
+			'all_items'          => __( 'All Videos', 'vimeo-llms' ),
+			'search_items'       => __( 'Search Videos', 'vimeo-llms' ),
+			'parent_item_colon'  => __( 'Parent Videos:', 'vimeo-llms' ),
+			'not_found'          => __( 'No videos found.', 'vimeo-llms' ),
+			'not_found_in_trash' => __( 'No videos found in Trash.', 'vimeo-llms' )
+		);
+
+		$args = array(
+			'labels'             => $labels,
+			'description'        => __( 'All your vimeo videos here.', 'vimeo-llms' ),
+			'menu_icon'          => 'dashicons-video-alt2',
+			'public'             => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'vimeo-video' ),
+			'capability_type'    => 'page',
+			'hierarchical'       => false,
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author' )
+		);
+
+		register_post_type( 'vimeo-video', $args );
+
+		register_taxonomy(
+			'video-tags',
+			'vimeo-video',
+			array(
+				'label' => __( 'Video tags', 'vimeo-llms' ),
+				'rewrite' => array( 'slug' => 'video-tags' ),
+				'hierarchical' => false,
+			)
+		);
+
+		register_taxonomy(
+			'video-genre',
+			'vimeo-video',
+			array(
+				'label' => __( 'Video genre', 'vimeo-llms' ),
+				'rewrite' => array( 'slug' => 'video-genre' ),
+				'hierarchical' => false,
+			)
+		);
+
+		register_taxonomy(
+			'video-author',
+			'vimeo-video',
+			array(
+				'label' => __( 'Video author', 'vimeo-llms' ),
+				'rewrite' => array( 'slug' => 'video-author' ),
+				'hierarchical' => false,
+			)
+		);
+
+	}
+
+	public function rewrite_flush() {
+		$this->init();
+		flush_rewrite_rules();
+	}
 }
 
 /** Intantiating main plugin class */
