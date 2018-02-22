@@ -29,9 +29,6 @@ class Vimeo_LLMS_Integration extends LLMS_Abstract_Integration {
 		// Admin scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 
-		// Admin scripts
-		add_action( 'the_content', array( $this, 'add_video_to_content' ), 7 );
-
 		// Before title stuff
 		add_action( 'edit_form_after_title', array( $this, 'edit_form_after_title' ), 7 );
 	}
@@ -175,6 +172,7 @@ class Vimeo_LLMS_Integration extends LLMS_Abstract_Integration {
 			$vid_id = str_replace( '/videos/', '', $_GET['video_uri'] );
 			$url    = "https://vimeo.com/$vid_id";
 			update_post_meta( get_the_ID(), 'vimeo_video', $url );
+			update_post_meta( get_the_ID(), '_llms_video_embed', $url );
 
 			if ( ! get_option( "vimeo_video_$vid_id" ) ) {
 				$this->save_video( $vid_id, $url );
@@ -212,13 +210,6 @@ class Vimeo_LLMS_Integration extends LLMS_Abstract_Integration {
 		wp_set_object_terms( $post_id, array( $author ), 'video-author' );
 	}
 
-	public function add_video_to_content( $content ) {
-		$url = get_post_meta( get_the_ID(), 'vimeo_video', 'single' );
-		if ( $url ) {
-			echo $this->iframe_from_url( $url );
-		}
-		return $content;
-	}
 
 	public function iframe_from_url( $url ) {
 		$url = str_replace( 'https://vimeo.com/', 'https://player.vimeo.com/video/', $url );
