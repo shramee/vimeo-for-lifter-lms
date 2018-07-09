@@ -93,12 +93,17 @@ class Vimeo_LLMS_Integration extends LLMS_Abstract_Integration {
 		$this->upload_video_button( 'Attach vimeo video' );
 	}
 
-	public function upload_video_form() {
+	public function upload_video_form( $url = '' ) {
+
+		if ( ! $url ) {
+			$url = admin_url( 'post.php?post=' . get_the_ID() . '&action=edit' );
+		}
+
 		$data   = [
 			'upload'       => [
 				'approach' => 'post',
 			],
-			'redirect_url' => admin_url( 'post.php?post=' . get_the_ID() . '&action=edit' ),
+			'redirect_url' => $url,
 		];
 		$res    = Vimeo_LLMS::vimeo_api( '/me/videos', $data );
 		$action = $res['upload_link_secure'];
@@ -167,7 +172,7 @@ class Vimeo_LLMS_Integration extends LLMS_Abstract_Integration {
 	}
 
 
-	private function check_response() {
+	public function check_response() {
 		if ( ! empty( $_GET['video_uri'] ) ) {
 			$vid_id = str_replace( '/videos/', '', $_GET['video_uri'] );
 			$url    = "https://vimeo.com/$vid_id";

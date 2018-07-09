@@ -53,7 +53,7 @@ class Vimeo_LLMS {
 
 	/**
 	 * Return class instance
-	 * @return LLMS_Abstract_Integration instance
+	 * @return Vimeo_LLMS_Integration instance
 	 */
 	public static function integration() {
 		return LLMS()->integrations()->get_integration( 'vimeo' );
